@@ -4,9 +4,17 @@
         <servlet-name>ConsultaCreditoServlet</servlet-name>
         <servlet-class>web.ConsultaCreditoServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RegistraCompraServlet</servlet-name>
+        <servlet-class>web.RegistraCompraServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ConsultaCreditoServlet</servlet-name>
         <url-pattern>/consulta-credito</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegistraCompraServlet</servlet-name>
+        <url-pattern>/registrar-compra</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
