@@ -41,9 +41,9 @@ public class RegistraCompraServlet extends HttpServlet {
 
         int id_compra = compra.getJsonNumber("id").intValue();
         int id_cliente = compra.getJsonNumber("id_cliente").intValue();
-        String nome_loja = compra.getJsonString("nomeLoja").getString();
-        String data_compra = compra.getJsonString("dataCompra").getString();
-        double valor_compra = compra.getJsonNumber("valorCompra").doubleValue();
+        String nome_loja = compra.getJsonString("nome_loja").getString();
+        String data_compra = compra.getJsonString("data_compra").getString();
+        double valor_compra = compra.getJsonNumber("valor_compra").doubleValue();
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date data = null;
