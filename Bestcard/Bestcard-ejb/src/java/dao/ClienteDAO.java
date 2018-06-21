@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Cliente;
 import util.ConnectionUtil;
 
@@ -30,6 +28,9 @@ public class ClienteDAO {
                 cliente.setNome(rs.getString("nome"));
                 cliente.setValorCredito(rs.getDouble("valor_credito"));
             }
+            
+            connection.close();
+            
             return cliente;
         } catch (SQLException ex) {
             throw new Exception("Erro ao processar consulta! Verifique o log do aplicativo.", ex);

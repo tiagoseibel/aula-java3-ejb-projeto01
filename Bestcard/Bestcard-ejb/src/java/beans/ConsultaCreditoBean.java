@@ -1,6 +1,7 @@
 package beans;
 
 import dao.ClienteDAO;
+import exceptions.AppException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,9 +15,9 @@ import model.Cliente;
 @Stateless
 public class ConsultaCreditoBean implements ConsultaCreditoBeanRemote, ConsultaCreditoBeanLocal {
 
-    public double getCredito(int cliente_id) {
+    public double getCredito(int cliente_id) throws AppException{
         double credito = 0;
-
+        
         try {
             ClienteDAO clienteDAO = new ClienteDAO();
             Cliente cliente = clienteDAO.findById(cliente_id);
@@ -25,16 +26,17 @@ public class ConsultaCreditoBean implements ConsultaCreditoBeanRemote, ConsultaC
 
         } catch (Exception ex) {
             Logger.getLogger(ConsultaCreditoBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new AppException("Houve um erro ao processar a requisição! Contate o suporte!");
         }
 
         return credito;
     }
 
-    public boolean registrarCompra(
+    public boolean registrarCompra (
             int id_cliente, String nome_loja,
             Date data_compra, double valor_compra,
             int id_compra
-    ) {
+    ) throws AppException {
         boolean result = false;
         double credito = getCredito(id_cliente);
 
