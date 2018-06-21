@@ -1,6 +1,7 @@
 package web;
 
 import beans.ConsultaCreditoBeanRemote;
+import exceptions.AppException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,6 +9,8 @@ import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -53,16 +56,28 @@ public class RegistraCompraServlet extends HttpServlet {
             throw new ServletException(ex);
         }
 
-        boolean ret = bean.registrarCompra(
-                id_cliente, nome_loja,
-                data, valor_compra, id_compra
-        );
+        boolean ret = false;
+        String retorno = "";
+        try {
+            ret = bean.registrarCompra(
+                    id_cliente, nome_loja,
+                    data, valor_compra, id_compra
+            );
 
-        if (ret) {
-            saida.write("{ \"msg\": \"OK\" }");
-        } else {
-            saida.write("{ \"msg\": \"Saldo insuficiente!\" }");
+            if (ret) {
+                retorno = "Compra efetuada!";
+            } else {
+                retorno = "Saldo Insuficiente!";
+            }
+        } catch (AppException ex) {
+            retorno = ex.getMessage();
         }
+
+        JsonObject json = Json.createObjectBuilder()
+                .add("message", retorno)
+                .build();
+
+        saida.write(json.toString());
 
     }
 }

@@ -5,17 +5,27 @@
     <script type="text/javascript">
         var URL = "http://localhost:8080/bestcard-web/consulta-credito";
 
-        function getCredito(idCliente) {
+        function getCredito(idCliente)
+        {
             var http = new XMLHttpRequest();
             http.onreadystatechange = function ()
             {
+//                document.getElementById("result").innerHTML = this.readyState;
                 if (this.readyState === 4 && this.status === 200) {
                     parseJson(this.responseText);
                 }
                 if (this.readyState === 4 && this.status !== 200) {
-                    document.getElementById("result").innerHTML = "Erro: " + this.statusText;
+                    
+                    var mensagem;
+                    try {
+                        obj = JSON.parse(this.responseText)
+                        mensagem = obj.message;
+                    } catch (e) {
+                        mensagem = this.statusText;
+                    }
+                    document.getElementById("result").innerHTML = "Erro: " + mensagem;
                 }
-                if (this.readyState === 3) {
+                if (this.readyState === 1) {
                     document.getElementById("result").innerHTML = "Aguarde...";
                 }
             };
@@ -26,7 +36,8 @@
 
         function parseJson(jsonData) {
             var obj = JSON.parse(jsonData);
-            document.getElementById("result").innerHTML = "O crédito do cliente é: " + obj.saldo;
+            document.getElementById("result")
+                    .innerHTML = "O crédito do cliente é: " + obj.saldo;
         }
 
     </script>
