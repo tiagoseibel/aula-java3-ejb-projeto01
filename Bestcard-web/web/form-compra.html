@@ -10,12 +10,15 @@
 
             function registrarCompra(oForm) {
 
+                var cliente = {};
+                cliente["id"] = Number(oForm.id_cliente.value);
+
                 var formData = {};
                 formData["id"] = Number(oForm.id_compra.value);
-                formData["id_cliente"] = Number(oForm.id_cliente.value);
-                formData["data_compra"] = oForm.data_compra.value;
-                formData["nome_loja"] = oForm.nome_loja.value;
-                formData["valor_compra"] = Number(oForm.valor_compra.value);
+                formData["cliente"] = cliente;
+                formData["datacompra"] = oForm.data_compra.value;
+                formData["nomeLoja"] = oForm.nome_loja.value;
+                formData["valorCompra"] = Number(oForm.valor_compra.value);
 
                 var http = new XMLHttpRequest();
 

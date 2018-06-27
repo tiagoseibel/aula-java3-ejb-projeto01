@@ -1,12 +1,12 @@
 package beans;
 
 import dao.ClienteDAO;
+import dto.CompraDTO;
 import exceptions.AppException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -15,9 +15,10 @@ import model.Cliente;
 @Stateless
 public class ConsultaCreditoBean implements ConsultaCreditoBeanRemote, ConsultaCreditoBeanLocal {
 
-    public double getCredito(int cliente_id) throws AppException{
+    @Override
+    public double getCredito(int cliente_id) throws AppException {
         double credito = 0;
-        
+
         try {
             ClienteDAO clienteDAO = new ClienteDAO();
             Cliente cliente = clienteDAO.findById(cliente_id);
@@ -32,15 +33,11 @@ public class ConsultaCreditoBean implements ConsultaCreditoBeanRemote, ConsultaC
         return credito;
     }
 
-    public boolean registrarCompra (
-            int id_cliente, String nome_loja,
-            Date data_compra, double valor_compra,
-            int id_compra
-    ) throws AppException {
+    public boolean registrarCompra(CompraDTO compra) throws AppException {
         boolean result = false;
-        double credito = getCredito(id_cliente);
+        double credito = getCredito(compra.getCliente().getId());
 
-        if (valor_compra > credito) {
+        if (compra.getValorCompra() > credito) {
             result = false;
         } else {
 
@@ -58,20 +55,20 @@ public class ConsultaCreditoBean implements ConsultaCreditoBeanRemote, ConsultaC
                                 "sa", "sa");
 
                 PreparedStatement p = con.prepareStatement(sql);
-                p.setInt(1, id_compra);
-                p.setInt(2, id_cliente);
-                p.setDate(3, new java.sql.Date(data_compra.getTime()));
-                p.setString(4, nome_loja);
-                p.setDouble(5, valor_compra);
+                p.setInt(1, compra.getId());
+                p.setInt(2, compra.getCliente().getId());
+                p.setDate(3, new java.sql.Date(compra.getDatacompra().getTime()));
+                p.setString(4, compra.getNomeLoja());
+                p.setDouble(5, compra.getValorCompra());
                 p.execute();
 
                 // Atualiza o saldo
-                double novoCredito = credito - valor_compra;
+                double novoCredito = credito - compra.getValorCompra();
 
                 // Atualiza cliente
                 PreparedStatement p2 = con.prepareStatement(sql2);
                 p2.setDouble(1, novoCredito);
-                p2.setInt(2, id_cliente);
+                p2.setInt(2, compra.getCliente().getId() );
                 p2.execute();
 
                 result = true;

@@ -1,0 +1,55 @@
+<html>
+    <meta charset="utf-8">
+    <title>Consulta Crédito</title>
+
+    <script type="text/javascript">
+        var URL = "http://localhost:8080/bestcard-web/consulta-credito";
+
+        function getCredito(idCliente)
+        {
+            var http = new XMLHttpRequest();
+            http.onreadystatechange = function ()
+            {
+//                document.getElementById("result").innerHTML = this.readyState;
+                if (this.readyState === 4 && this.status === 200) {
+                    parseJson(this.responseText);
+                }
+                if (this.readyState === 4 && this.status !== 200) {
+                    
+                    var mensagem;
+                    try {
+                        obj = JSON.parse(this.responseText)
+                        mensagem = obj.message;
+                    } catch (e) {
+                        mensagem = this.statusText;
+                    }
+                    document.getElementById("result").innerHTML = "Erro: " + mensagem;
+                }
+                if (this.readyState === 1) {
+                    document.getElementById("result").innerHTML = "Aguarde...";
+                }
+            };
+
+            http.open("GET", URL + "?id=" + idCliente);
+            http.send();
+        }
+
+        function parseJson(jsonData) {
+            var obj = JSON.parse(jsonData);
+            document.getElementById("result")
+                    .innerHTML = "O crédito do cliente é: " + obj.saldo;
+        }
+
+    </script>
+
+    <body>
+        <form>
+            <input type="text" name="id" placeholder="digite o codigo do cliente" size="20"/>
+            <br />
+            <span id="result"></span>
+            <br />
+            <input type="button" value="Consultar crédito" onclick="getCredito(this.form.id.value)" /> 
+        </form>
+    </body>
+
+</html>
