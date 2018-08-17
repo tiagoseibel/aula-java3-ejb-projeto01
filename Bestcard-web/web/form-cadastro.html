@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script type="text/javascript">
+            var URL = "http://localhost:8080/bestcard-web/registrar-cliente";
+
+            function preparaForm(oForm) {
+
+                var formData = {};
+                formData["nome"] = oForm.nome.value;
+
+                var reader = new FileReader();
+                reader.readAsDataURL(oForm.upload.files[0]);
+                reader.onload = function () {
+                    formData["upload"] = reader.result;
+                    registrarCliente(formData);
+                };
+                reader.onerror = function (error) {
+                    console.log(error);
+                };
+            }
+
+            function registrarCliente(formData) {
+
+                var http = new XMLHttpRequest();
+
+                http.onreadystatechange = function ()
+                {
+                    if (this.readyState === 4 && this.status === 200) {
+                        parseJson(this.responseText);
+                    }
+                    if (this.readyState === 4 && this.status !== 200) {
+                        document.getElementById("result").innerHTML = "Erro: " + this.statusText;
+                    }
+                    if (this.readyState === 3) {
+                        document.getElementById("result").innerHTML = "Aguarde...";
+                    }
+                };
+
+                http.open("POST", URL);
+                http.setRequestHeader("Content-type", "application/json");
+                http.send(JSON.stringify(formData));
+            }
+
+            function parseJson(jsonData) {
+                var obj = JSON.parse(jsonData);
+                document.getElementById("result").innerHTML = "" + obj.message;
+            }
+
+        </script>
+
+    </head>
+    <body>
+        <br />
+        <span id="result"></span>
+        <br />
+
+        <form name="form1" method="post">
+            <label>ID cliente</label>
+            <input type="text" name="nome" />
+            <br>
+            <label>Foto</label>
+            <input type="file" name="upload" />
+            <br>           
+            <input type="button" value="Comprar" onclick="preparaForm(this.form)">
+        </form>
+    </body>
+</html>

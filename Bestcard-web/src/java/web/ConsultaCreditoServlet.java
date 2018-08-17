@@ -26,6 +26,8 @@ public class ConsultaCreditoServlet extends HttpServlet {
         response.setContentType("application/json");
         PrintWriter saida = response.getWriter();
         
+        System.out.println("Test = " + request.getRequestURI());
+        
         int client_id = parseInt( request.getParameter("id") );
         
         JsonObject retorno = null;
