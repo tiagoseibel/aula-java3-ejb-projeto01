@@ -1,1 +1,12 @@
+/Bestcard/build/
+/Bestcard/dist/
+
+/Bestcard-shared/build/
+/Bestcard-shared/dist/
+
+/Bestcard-web/build/
 /Bestcard-web/dist/
+/Bestcard-web/nbproject/private/
+
+/Bestcard/Bestcard-ejb/build/
+/Bestcard/Bestcard-ejb/dist/
